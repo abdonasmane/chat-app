@@ -1,0 +1,253 @@
+#root {
+  margin: 0 auto;
+  max-width: 1280px;
+  padding: 2rem;
+}
+
+main {
+  background-color: #f3f3f3; /* Light mode background color */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #333; /* Light mode text color */
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.dark-mode main {
+  background-color: #222; /* Dark mode background color */
+  color: #ddd; /* Dark mode text color */
+}
+
+#acceuil, .box, #loginview, #createaccount {
+  background-color: #f9f9f9; /* Light mode background color */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  color: #333; /* Light mode text color */
+  margin: 0 auto;
+  margin-bottom: 1em;
+  padding: 20px;
+}
+
+#acceuil {
+  background-color: #f3f3f3;
+}
+
+legend {
+  font-size: 1.2em;
+  font-weight: bold;
+  margin-bottom: 1em;
+}
+
+.formular {
+  border-radius: 2em;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-row {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1em;
+}
+
+label {
+  font-weight: bold;
+  margin-right: 1em;
+  width: 8em;
+}
+
+input {
+  border: 1px solid #ccc;
+  border-radius: 1em;
+  padding: 10px;
+  width: 100%;
+}
+
+button {
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #5fa2eb;
+}
+
+#acceuil {
+  display: flex;
+  flex-direction: row;
+}
+
+.groups-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-manage {
+  display: flex;
+  flex-direction: column;
+  margin-left: 2em;
+}
+
+.member-container {
+  min-width: 31em;
+}
+
+.owned-add {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+#owned-input {
+  margin-bottom: 1em;
+  width: 93%;
+}
+
+#addGroup {
+  width: 20em;
+}
+
+.selected-group {
+  color: rgb(126, 131, 133);
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.select-container {
+  display: flex;
+  flex-direction: row;
+  min-width: 32em;
+}
+
+#select-button {
+  height: 2em;
+  padding-bottom: 1.7em;
+  width: 12em;
+}
+
+.cursor-on {
+  cursor: pointer;
+}
+
+#select-options {
+  appearance: none;
+  border-radius: 1em;
+  font-size: 1em;
+  margin-left: 0.1em;
+  margin-right: 1em;
+  padding: 8px 12px;
+}
+
+#select-options:focus {
+  border-color: #5f8ae9;
+  outline: none;
+}
+
+.no-members-message {
+  color: #999;
+  font-style: italic;
+  margin-top: 0.5em;
+  margin-right: 2em;
+}
+
+.joined-members {
+  align-items: center;
+  display: flex;
+  margin-bottom: 1em;
+}
+
+.joined-email {
+  background-color: #f1f1f1;
+  border: 1px solid #e4eaea;
+  border-radius: 1em;
+  font-style: italic;
+  margin-right: 1em;
+  padding: 0.5em;
+  width: 20em; /* Remove fixed width */
+  display: inline-block; /* Make it behave like a block-level element */
+}
+
+.delete-button {
+  margin-left: 1em;
+  width: 10em;
+}
+
+.delete-button:hover {
+  background-color: #ff6b6b;
+}
+
+.joined-group {
+  color: rgb(126, 131, 133);
+  font-size: x-large;
+  font-weight: bold;
+}
+
+.chat-container {
+  background-color: #f3f3f3;
+  border: 1px solid #ccc;
+  border-radius: 1em;
+  height: 20em;
+  overflow-y: auto;
+  scroll-behavior: smooth;
+  width: 100%;
+}
+
+.messages {
+  padding: 1em;
+}
+
+.message-container {
+  clear: both;
+  margin-bottom: 1em;
+  overflow: auto;
+}
+
+.message {
+  background-color: rgb(240, 240, 240);
+  border: 1px solid #acaeae;
+  border-radius: 1em;
+  clear: both;
+  display: inline-block;
+  max-width: 40%;
+  overflow-wrap: break-word;
+  padding: 0.5em;
+}
+
+.message-me {
+  background-color: rgb(240, 240, 240);
+  border: 1px solid #acaeae;
+  border-radius: 1em;
+  float: right;
+  max-width: 40%;
+  overflow-wrap: break-word;
+  padding: 0.5em;
+}
+
+.poster {
+  color: #0c0c0c;
+  font-size: 0.8em;
+  margin-left: 0.5em;
+  padding: 0.2em;
+}
+
+
+.message.outgoing {
+  align-self: flex-end;
+}
+
+.message-input-container {
+  display: flex;
+  flex-direction: column;
+  padding: 1em;
+}
+
+.no-members, #messagecomponent {
+  min-width: 31em;
+}
+
+#message-input {
+  margin-bottom: 1em;
+  width: 97%;
+}
+
