@@ -6,7 +6,6 @@ stages:
     - deploy
 
 lint-js: 
-  # On test la qualité du code js backend
   stage: backend-lint
   tags:
     - docker
@@ -22,7 +21,6 @@ lint-js:
   allow_failure: false
 
 super-test:
-  # On test les fonctionnalités du backend
   stage: backend-test
   tags:
     - docker
@@ -39,7 +37,6 @@ super-test:
   allow_failure: false
 
 semgrep:
-  # On test la sécurité avec une analyse statique du backend
   stage: backend-test
   image: semgrep/semgrep
   script: 
@@ -73,7 +70,6 @@ frontend-css:
     allow_failure: false
 
 frontend-cypress:
-  # On test les fonctionnalités du frontend
   stage: frontend-test
   tags:
     - docker
@@ -81,11 +77,11 @@ frontend-cypress:
   script:
     - cd backend
     - npm i
-    - npm run updatedb # nettoyage de la db
-    - npm run startdev & # demarrage du serveur sur le port 3000
+    - npm run updatedb
+    - npm run startdev &
     - cd ../frontend
     - npm i
-    - npm run dev & # demarrage de l'application frontend sur le port 5173
+    - npm run dev &
     - npx cypress run > ../cypress.txt
   artifacts:
         when: always
@@ -94,12 +90,11 @@ frontend-cypress:
   allow_failure: false
 
 badges:
-  # generation des badges
   stage: deploy
   image: python:3.9
   script:
       - pip install anybadge
-      - ./generateBadges.sh # script de generation des badges
+      - ./generateBadges.sh # script to generate gitlab ci badges
   dependencies:
       - lint-js
       - frontend-css
@@ -114,47 +109,33 @@ scalingo:
   tags:
     - docker
   variables:
-    # SCALINGO_API_TOKEN # variable à ne pas définir en clair ici (cf instructions à la fin du .gitlab-ci.yml ci-dessous)
-    SCALINGO_APP_NAME: wtspweb # le nom de votre appli chez scalingo (A ADAPTER)
-    SCALINGO_REGION: osc-fr1 # l'instance de scalingo sur laquelle votre appli est déployée
+    SCALINGO_APP_NAME: wtspweb
+    SCALINGO_REGION: osc-fr1
     GIT_DEPTH: 0
-    PROJECT_DIR: backend # Le répertoire dans le dépôt où est le backend
-  image: ruby:3.1.3 # car dpl est codé en Ruby
+    PROJECT_DIR: backend
+  image: ruby:3.1.3
   script:
-    # Installer scalingo CLI
+    # Install scalingo CLI
     - curl -O https://cli-dl.scalingo.com/install && bash install
-    # Pour indiquer sur le dépôt distant où est le backend 
-    # (s'il est à la racine du projet ceci est facultatif, et il est possible de le faire une fois pour toute directement dans l'interface web de scalingo)
     - scalingo --app=$SCALINGO_APP_NAME env-set PROJECT_DIR=$PROJECT_DIR 
-    # Se connecter à scalingo avec le token d'authentification
     - scalingo login --api-token $SCALINGO_API_TOKEN
-    # Créer une paire de clé ssh pour faire les manips git sur le dépôt scalingo
     - mkdir -p ~/.dpl
     - ssh-keygen -t rsa -N "" -C $HOSTNAME -f ~/.dpl/id_rsa
-    # Ajouter à scalingo la clé publique créée précédemment
     - scalingo keys-remove dpl_tmp_key || echo "On la supprime au préalable au cas où elle aurait déjà été ajoutée"
     - scalingo keys-add dpl_tmp_key ~/.dpl/id_rsa.pub
-    # Initialiser le dépôt scalingo distant (en forçant si ce n'est pas le première fois)
     - scalingo --app $SCALINGO_APP_NAME git-setup --remote scalingo-dpl --force
-    - curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash # Installation de nvm
+    - curl https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash # Install nvm
     - export NVM_DIR="$HOME/.nvm"
     - \. "$NVM_DIR/nvm.sh"  
     - \. "$NVM_DIR/bash_completion"
-    - nvm install node # Installe la dernière version de node
+    - nvm install node
     - nvm use node
-    - cd frontend # On se place dans le répertoire des sources du frontend
+    - cd frontend
     - sed -i 's#http://localhost:3000#https://wtspweb.osc-fr1.scalingo.io#g' src/App.jsx # here we change the adress of backend
     - sed -i 's#ws://localhost:3000#wss://wtspweb.osc-fr1.scalingo.io#g' src/App.jsx # here we change the adress of backend
-    - npm i && npm run build && cp -rf dist/* ../backend/src/frontend # Pour générer la version de production du frontend
-    - git config --global user.email "$GITLAB_USER_EMAIL" # Configure git pour pouvoir pousser la version de production du frontend sur le dépot git de scalingo
+    - npm i && npm run build && cp -rf dist/* ../backend/src/frontend
+    - git config --global user.email "$GITLAB_USER_EMAIL"
     - git config --global user.name "$GITLAB_USER_NAME"
-    - cd ../backend/src/frontend && git add . && git commit -m "MAJ frontend" # Ajoute les fichiers de production du frontend
-    # Pousser la version du backend sur le dépôt scalingo (ce qui va provoquer son déploiement)
+    - cd ../backend/src/frontend && git add . && git commit -m "MAJ frontend"
     - "GIT_SSH_COMMAND='ssh -o StrictHostKeyChecking=no -i ~/.dpl/id_rsa' git push scalingo-dpl HEAD:refs/heads/main -f"
-    # Supprimer la clé temporaire ajoutée
     - scalingo keys-remove dpl_tmp_key || echo Suppression
- # la variable SCALINGO_API_TOKEN contient le token que vous avez généré chez scalingo via le menu `User Settings > API tokens`
- #
- # Afin que la variable SCALINGO_API_TOKEN n'apparaissent pas en clair sur notre dépôt public gitlab, on définit cette variable via 
- # le menu `Settings > CI/CD > Variables` et on la masque dans le résultat des logs des jobs en lui appliquant la propriété "Masked"
- # Plus de détails sur https://docs.gitlab.com/ee/ci/variables/index.html.

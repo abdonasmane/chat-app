@@ -5,332 +5,288 @@ author:
 - Yassine Rjeb
 --- 
 
-## Cahier des charges
+## Specifications
 
-### Fonctionnalités souhaitées
+### Desired Features
 
-#### Authentification :
+Authentication
 
-DONE > Permettre aux utilisateurs de créer un compte : Les utilisateurs doivent pouvoir fournir des informations telles que leur nom, leur adresse e-mail et leur mot de passe pour créer un compte.
+✅ Account Creation: Users can create an account by providing their name, email address, and password.
 
-DONE > Permettre aux utilisateurs de se connecter à leur compte : Une fois un compte créé, les utilisateurs doivent pouvoir se connecter en utilisant leur adresse e-mail et leur mot de passe.
+✅ Login: Users can log in using their email address and password.
+Group Management
 
-#### Gestion des groupes :
+✅ Create Groups: Users can create new groups by specifying a name.
 
-DONE > Permettre la création de nouveaux groupes : Les utilisateurs doivent pouvoir créer de nouveaux groupes en spécifiant un nom.
+❌ Join Groups: Users cannot yet search for existing groups and request to join them.
 
-NOT DONE > Permettre aux utilisateurs de rejoindre des groupes existants : Les utilisateurs doivent pouvoir rechercher des groupes existants et demander à les rejoindre.
+✅ Manage Members: Group owners can add or remove members.
 
-DONE > Permettre aux propriétaires de groupes de gérer les membres : Les propriétaires de groupes doivent pouvoir ajouter ou supprimer des membres.
+❌ Manage Groups: Group owners cannot yet modify the group name or delete the group.
 
-NOT DONE > Permettre aux propriétaires de groupes de gérer leurs groupes : Les propriétaires de groupes doivent modifier le nom du groupe, et supprimer le groupe si nécessaire.
+#### Messagerie
 
-#### Messagerie :
+✅ Échange de messages : Les utilisateurs peuvent envoyer des messages textuels aux autres membres d'un groupe.
 
-DONE > Permettre l'échange de messages entre les membres d'un groupe : Les utilisateurs doivent pouvoir envoyer des messages textuels aux autres membres d'un groupe.
+✅ Affichage chronologique : Les messages sont affichés dans l'ordre chronologique de leur envoi.
 
-DONE > Afficher les messages dans l'ordre chronologique : Les messages doivent être affichés dans l'ordre chronologique de leur envoi.
+❌ Suppression des messages : Les utilisateurs ne peuvent pas encore supprimer leurs propres messages, et les propriétaires de groupes ne peuvent pas encore supprimer tous les messages du groupe.
 
-NOT DONE > Permettre la suppression des messages par les utilisateurs autorisés : Les utilisateurs doivent pouvoir supprimer leurs propres messages, et les propriétaires de groupes doivent pouvoir supprimer tous les messages du groupe si nécessaire.
+### Use Cases
 
-### Cas d'usage
+![Use Case Diagram](screens/dev0.png)
 
-A modifier/compléter 
+### Screenshots
 
-```plantuml
-@startuml
-left to right direction
-actor "Visitor" as v
-actor "Registered User" as u
-actor "Admin" as a
-u <-- a
-rectangle Application {
-  usecase "Register" as R
-  usecase "Connect" as C
-  usecase "Create a Group" as CG
-  usecase "Add user in one of my groups" as AU
-  usecase "Delete user in one of my groups" as DU
-  usecase "Delete a Group" as DG
-  usecase "Change role" as CR
-  usecase "Send message to group" as SM
-}
-a --> DG
-a --> CR
-v --> R
-u --> C
-u --> AU
-u --> DU
-u --> SM
-u --> CG
-@enduml
-```
+#### Main Page
+![Main Page](screens/dev1.png)
 
-### Captures d'écran
+#### Account Creation with Invalid Information
+![Account Creation with Invalid Information](screens/dev2.png)
 
-#### Page Principale
-![Page Principale](screens/dev1.png)
+#### Account Creation
+![Account Creation](screens/dev3.png)
 
-#### Creation de compte avec informations erronées
-![Creation de compte avec informations erronées](screens/dev2.png)
+#### Login + Home Page
+![Home Page](screens/dev4.png)
 
-#### Creation d'un compte
-![Creation d'un compte](screens/dev3.png)
+#### Group Creation
+![Group Creation](screens/dev5.png)
 
-#### login + Page d'acceuil
-![Page d'acceuil](screens/dev4.png)
+#### Group Management
+![Group Management](screens/dev6.png)
 
-#### Creation d'un groupe
-![Creation d'un groupe](screens/dev5.png)
+#### Adding Members
+![Adding Members](screens/dev7.png)
 
-#### Gestion du groupe
-![Gestion du groupe](screens/dev6.png)
+#### Group Conversation
+![Group Conversation](screens/dev8.png)
 
-#### Ajout de membres
-![Ajout de membres](screens/dev7.png)
+#### Sending a Message
+![Sending a Message](screens/dev9.png)
 
-#### Converation dans un groupe
-![Converation dans un groupe](screens/dev8.png)
+#### Message Reception (Uchiha Madara speech 1)
+![Message Reception (Uchiha Madara speech 1)](screens/dev10.png)
 
-#### Envoi de message
-![Envoi de message](screens/dev9.png)
+#### Message Reception (Uchiha Madara speech 2)
+![Message Reception (Uchiha Madara speech 2)](screens/dev11.png)
 
-#### Reception de message (Uchiha Madara speech 1)
-![Reception de message (Uchiha Madara speech 1)](screens/dev10.png)
+### Implemented API
 
-#### Reception de message (Uchiha Madara speech 2)
-![Reception de message (Uchiha Madara speech 2)](screens/dev11.png)
+Swagger documentation link: https://wtspweb.osc-fr1.scalingo.io/doc/
 
-### API mise en place
-
-lien vers documentation swagger: https://wtspweb.osc-fr1.scalingo.io/doc/
-
-## Architecture du code
+## Code Architecture
 
 ### FrontEnd
 
-#### Composants de connexion (connect-components):
-Ces composants sont responsables de l'interface utilisateur liée à la connexion et à la création de compte.
+#### Authentication Components (connect-components):
+These components handle the user interface for authentication and account creation.
 
-Acceuil.jsx: Ce composant représente la page affichée après le login réussit.
+- **Acceuil.jsx**: This component represents the page displayed after a successful login.
+- **CreateAccount.jsx**: This component allows users to create a new account by providing their name, email address, and password.
+- **LoginView.jsx**: This component manages the login process for existing users, allowing them to enter their email and password.
 
-CreateAccount.jsx: Ce composant permet aux utilisateurs de créer un nouveau compte en fournissant leur nom, leur adresse e-mail et leur mot de passe.
+#### Group Management Components (groups-components):
+These components manage the user interface for group management, including creation, deletion, and member management.
 
-LoginView.jsx: Ce composant gère le processus de connexion des utilisateurs existants en leur permettant de saisir leur adresse e-mail et leur mot de passe.
+- **GroupsManager.jsx**: This component allows users to manage the groups they own. It includes sub-components such as:
+  - **SelectMembers.jsx**: Handles the list of users available to be added to a group.
+  - **DeleteMembers.jsx**: Manages the removal of group members.
+- **SelectMembers.jsx**: Allows users to select members to add to an existing group.
+- **DeleteMembers.jsx**: Allows users to remove members from their group, consisting of multiple **DeleteMember.jsx** components, each representing a member.
+- **DeleteMember.jsx**: Represents a member belonging to a group.
+- **JoinedGroups.jsx**: Displays the list of groups the user is a member of, consisting of multiple **JoinedGroup.jsx** components, each representing a group.
+- **JoinedGroup.jsx**: Represents a group the user is a member of.
+- **OwnedGroups.jsx**: Displays the list of groups the user has created, consisting of multiple **OwnedGroup.jsx** components, each representing a group.
+- **OwnedGroup.jsx**: Represents a group the user has created.
 
-#### Composants de gestion de groupes (groups-components):
-Ces composants gèrent l'interface utilisateur associée à la gestion des groupes, y compris la création, la suppression et la gestion des membres.
+#### Messaging Components (messages-components):
+These components manage the user interface for sending and receiving messages in groups.
 
-GroupsManager.jsx: Ce composant permet aux utilisateurs de gérer les groupes qu'ils possèdent. Il a comme sous composants SelectMembers.jsx qui gère la liste des utilisateurs proposée pour être ajouté à un groupe, et DeleteMembers.jsx qui gère la suppression des membres d'un groupe.
-
-SelectMembers.jsx: Ce composant permet à l'utilisateur de sélectionner les membres à ajouter à un groupe existant.
-
-DeleteMembers.jsx: Ce composant permet à l'utilisateur de supprimer les membres de son groupe, il est composé de plusieurs DeleteMember.jsx, chacun représentant un membre.
-
-DeleteMember.jsx: Ce composant représente un membre appartenant à un groupe.
-
-JoinedGroups.jsx: Ce composant affiche la liste des groupes dont l'utilisateur est un membre, il est composé de plusieurs JoinedGroup.jsx, chacun représentant un groupe.
-
-JoinedGroup.jsx: Ce composant représente un groupe auquel l'utilisateur est membre.
-
-OwnedGroups.jsx: Ce composant affiche la liste des groupes dont l'utilisateur est le créateur, il est composé de plusieurs OwnedGroup.jsx, chacun représentant un groupe.
-
-OwnedGroup.jsx: Ce composant représente un groupe que l'utilisateur a créé.
-
-#### Composants de gestion des messages (messages-components):
-Ces composants gèrent l'interface utilisateur associée à l'envoi et à la réception de messages dans les groupes.
-
-MessagesManager.jsx: Ce composant affiche la liste des messages dans un groupe spécifique et permet à l'utilisateur d'envoyer de nouveaux messages.
-
-Message.jsx: Ce composant représente un message individuel dans une conversation de groupe. Il affiche le contenu du message, et potentiellement le nom de l'utilisateur qui l'a envoyé.
-
-PostMessage.jsx: Ce composant permet à l'utilisateur d'écrire et d'envoyer un nouveau message dans la conversation du groupe.
+- **MessagesManager.jsx**: Displays the list of messages in a specific group and allows users to send new messages.
+- **Message.jsx**: Represents an individual message in a group conversation. It displays the message content and potentially the sender's name.
+- **PostMessage.jsx**: Allows users to write and send a new message in the group conversation.
 
 ### Backend
 
-#### Schéma de votre base de donnée
+#### Database Schema
 
-A modifier/compléter...
+![DB schema](screens/dev22.png)
 
-```plantuml
-class User{
-  id
-  name
-  email
-  passhash
-  isAdmin : boolean
-}
-
-class Message{
-  id
-  content
-  createdAt
-  userId
-  groupId
-}
-
-class Group{
-  id
-  name
-  ownerId
-}
-
-User "1" -- "n" Message : posts
-Group "1" -- "n" Message : contains
-
-User "n" -- "n"  Group : is member 
-User "1" -- "n"  Group : create and own
-```
-
-#### Architecture de votre code
+#### Backend Code Architecture
 
 ##### Backend (backend/src):
 
-###### Contrôleurs (controllers):
-Ce dossier contient les fichiers qui définissent la logique métier de notre application backend.
-Chaque fichier de contrôleur correspond généralement à une entité ou une fonctionnalité spécifique de notre application.
-Par exemple, groups.js contient les fonctions pour gérer les opérations liées aux groupes, telles que la création, la récupération, la mise à jour et la suppression.
+###### Controllers (controllers):
+This folder contains files that define the business logic of the backend application.
+Each controller file typically corresponds to a specific entity or feature.
+For example, **groups.js** contains functions for managing group operations such as creation, retrieval, updating, and deletion.
 
-###### Modèles (models):
-Dans ce dossier, nous définissons les modèles de données de notre application, qui représentent les entités stockées dans notre base de données.
-Les modèles définissent la structure des données et les relations entre elles, ce qui facilite les opérations CRUD (Create, Read, Update, Delete).
-Par exemple, groups.js définit le schéma d'un groupe avec ses attributs.
+###### Models (models):
+This folder defines the data models representing entities stored in the database.
+The models define data structures and relationships, facilitating CRUD operations.
+For example, **groups.js** defines the schema for a group with its attributes.
 
 ###### Routes (routes):
-Les fichiers de ce dossier définissent les routes de l'API REST de notre application.
-Chaque fichier de route correspond généralement à un ensemble de routes pour une entité ou une fonctionnalité spécifique.
-Par exemple, groups.js contenient les définitions des routes pour les opérations liées aux groupes.
+This folder defines the API routes for the application.
+Each route file generally corresponds to a set of routes for a specific entity or feature.
+For example, **groups.js** defines the routes for group-related operations.
 
-###### Utilitaires (util):
-Ce dossier contient des utilitaires ou des fonctions réutilisables qui ne sont pas spécifiques à une fonctionnalité particulière mais qui sont nécessaires à plusieurs endroits de notre application backend.
-Par exemple, logger.js contient des fonctions pour enregistrer des messages de journalisation dans la console.
+###### Utilities (util):
+This folder contains reusable utilities or functions that are not specific to any particular feature but are needed throughout the backend application.
+For example, **logger.js** includes functions for logging messages to the console.
 
-###### Fichier principal (app.js et server.js):
-Ce fichier est le point d'entrée de notre application backend.
-Il est responsable de démarrer le serveur Express.
-C'est là que nous définissons les routes, les gestionnaires d'erreurs, etc., pour gérer les requêtes HTTP entrantes et retourner les réponses appropriées.
+###### Main Files (app.js and server.js):
+These files are the entry points for the backend application.
+They are responsible for starting the Express server, defining routes, handling errors, and managing incoming HTTP requests.
 
-### Gestion des rôles et droits
+### Role and Permission Management
 
-#### Coté backend
+#### Backend Side
+Currently, access is open to all.
 
-Ici on autorise l'accès à tous.
+#### Frontend Side
+The backend only provides the necessary information, avoiding exposure of sensitive data. However, the endpoint providing this information remains open per the backend assignment's requirements.
 
-#### Coté frontend
+# Testing
 
-Le backend ne fourni dans ses réponse que le nécessaire, on ne fourni pas des information sensible, c'est à un dire un utilisateur ne peux pas voir ce qui ce passe dans les autres groupes. Cependant l'endpoint qui fourni cette information est encors ouvert, si Mr Hacker le trouve... en tout cas on l'a laissé puisque l'énoncé du TP Backend demande cela.
+## Backend
 
-## Test
+### Authentication & User Management
 
-### Backend
+#### **Login and User Listing Test**
+This test verifies that a user can successfully log in and retrieve the list of users. It also checks scenarios where the token is missing or invalid.
 
-#### Test de connexion et de liste d'utilisateurs
+#### **Account Creation, Password Update, and Login with Old Password**
+This test ensures that a user can create an account, log in, update their password, and checks that login with the old password fails after an update.
 
-Ce test vérifie si un utilisateur peut se connecter avec succès et obtenir la liste des utilisateurs. Il teste également les cas où le token est manquant ou invalide.
+#### **Login with Invalid Credentials**
+This test covers scenarios where a user attempts to log in with missing credentials, an incorrect email, or an incorrect password.
 
-#### Test de création de compte et de connexion, de mise à jour du mot de passe, et de connexion avec l'ancien mot de passe
+#### **User Creation with Invalid Information**
+This test verifies failure cases during user registration due to invalid details, such as an invalid email, username, or weak password.
 
-Ce test vérifie la création d'un compte utilisateur, la connexion réussie, la mise à jour du mot de passe, et le cas où l'utilisateur essaie de se connecter avec l'ancien mot de passe après la mise à jour.
+### Administration Features
 
-#### Test de connexion avec des informations invalides
+#### **Administrative Operations Test**
+This test covers user management actions such as updating user details (password, email, username, isAdmin) and deleting users.
 
-Ce test couvre les cas où l'utilisateur essaie de se connecter sans email ni mot de passe, avec un email incorrect ou un mot de passe incorrect.
+#### **Token Usage by Deleted Users**
+This test checks if a deleted user attempts to use their token, ensuring proper security handling.
 
-#### Test de création d'utilisateur avec des informations invalides
+### Group Management
 
-Ce test vérifie les différents scénarios où la création d'un nouvel utilisateur échoue en raison d'informations invalides, telles qu'un email invalide, un nom invalide ou un mot de passe faible.
+#### **Group Creation and Member Management**
+This test verifies the ability to create a group, add members, and list members. Some member management tests were commented out after implementing WebSockets.
 
-#### Test des fonctionnalités d'administration
+### Messaging
 
-Ce test couvre les opérations d'administration, telles que la mise à jour des informations utilisateur (mot de passe, email, nom, isAdmin) et la suppression d'utilisateurs.
+#### **Message Creation and Retrieval**
+This test ensures that users can send and retrieve messages within a group. Some messaging-related tests were commented out after implementing WebSockets.
 
-#### Test de tentative d'utilisation du token par un utilisateur supprimé par l'administrateur
+### **Test Coverage**
+These tests provide 100% coverage of backend files developed before the addition of WebSockets.
 
-Ce test vérifie le comportement lorsque l'administrateur supprime un utilisateur et que cet utilisateur tente toujours d'utiliser son token.
+---
 
-#### Test de création de groupe et d'ajout/liste de membres
+## Frontend
 
-Ce test couvre la création d'un groupe, l'ajout de membres au groupe et la liste des membres du groupe. Certains tests associés à la gestion des membres ont été commentés après l'ajout de fonctionnalités de websockets.
+### **Authentication**
 
-#### Test des messages
+#### **User Registration Test**
+This test verifies the registration process by filling out the form with valid information, such as a username, a randomly generated unique email, and a valid password. It ensures that a success message appears after registration and that the email is pre-filled on the login page.
 
-Ce test vérifie la création et la récupération de messages dans un groupe. Certains tests associés à la gestion des messages ont également été commentés après l'ajout de fonctionnalités de websockets.
+#### **Registering with an Existing Email**
+This test checks the scenario where a user attempts to sign up with an already registered email, ensuring the proper error message is displayed.
 
-#### Couverture
+#### **Registration with Invalid Information**
+This test validates various failure cases where the user provides invalid registration details, such as an invalid username, email, or password. It ensures that the appropriate error messages are displayed.
 
-Ces tests fournissent une couverture de 100% sur les fichiers du backend qu'on a écrit (Avant l'ajout des websockets).
+#### **Login with Invalid Information**
+This test verifies cases where a user provides invalid login credentials, such as an incorrect email format or weak password, and ensures that appropriate error messages are shown.
 
-### Frontend
+#### **Login with Incorrect Credentials**
+This test ensures that login attempts with a valid email but incorrect password result in a proper failure message.
 
-#### connect
+#### **Successful Login**
+This test verifies that a user can log in successfully using previously registered credentials and is redirected to the homepage.
 
-##### Test d'inscription (Register)
-Ce test vérifie le processus d'inscription en remplissant le formulaire avec des informations valides, telles qu'un nom, un email unique généré aléatoirement, et un mot de passe valide. Il vérifie également que le message de succès est affiché après l'inscription et que l'email est pré-rempli dans la vue de connexion.
+### **Group Features**
 
-##### Test d'inscription avec un email existant (Register with existing email)
-Ce test vérifie le scénario où un utilisateur tente de s'inscrire avec un email qui existe déjà dans la base de données. Il vérifie que le message d'échec est affiché après la tentative d'inscription.
+#### **User Registration, Login, and Group Management**
+This test ensures that a user can register, log in, and manage groups. It verifies that after creating a group, it appears in both the user's created groups list and joined groups list. It also ensures that the group management elements are present and that the member list is initially empty. The test further validates that a user can add and remove members, updating the list accordingly.
 
-##### Test d'inscription avec des informations invalides (Register invalid info)
-Ce test vérifie différents scénarios où l'utilisateur fournit des informations invalides lors de l'inscription, telles qu'un nom invalide, un email invalide et un mot de passe invalide. Il vérifie que les messages d'erreur appropriés sont affichés.
+### **Messaging Features**
 
-##### Test de connexion avec des informations invalides (Login invalid info)
-Ce test vérifie les cas où l'utilisateur fournit des informations de connexion invalides, comme un email invalide et un mot de passe invalide. Il vérifie que les messages d'erreur appropriés sont affichés.
+#### **User Registration, Login, and Messaging**
+This test validates the messaging functionality by ensuring that:
+1. A user registers, logs in, and creates a group.
+2. The messaging interface appears when selecting the created group.
+3. A message can be sent successfully.
+4. A second user is registered and added to the group.
+5. The second user can send messages.
+6. The first user can see messages from the second user, ensuring correct display of messages and sender information.
 
-##### Test de connexion avec des informations incorrectes (Login with incorrect info)
-Ce test vérifie le cas où l'utilisateur fournit des informations de connexion correctes mais incorrectes, telles qu'un email correct mais un mot de passe incorrect. Il vérifie que le message d'échec de connexion est affiché.
+---
 
-##### Test de connexion (Login)
-Ce test vérifie le processus de connexion en utilisant les informations d'inscription valides précédemment fournies. Il vérifie que l'utilisateur est redirigé vers la page d'accueil après une connexion réussie.
+## **Integration & Deployment**
 
-#### groups
+### **Continuous Integration Jobs**
 
-##### Inscription, connexion et test des fonctionnalités de groupe
-Ce test vérifie le processus d'inscription et de connexion d'un utilisateur, puis teste les fonctionnalités de groupe. Après avoir visité la page, il saisit les informations d'inscription, crée un compte, se connecte avec succès, et crée un nouveau groupe avec un nom généré aléatoirement. Ensuite, il vérifie que le groupe créé apparaît à la fois dans la liste des groupes appartenant à l'utilisateur et dans la liste des groupes auxquels il a rejoint. Il vérifie également que les éléments de gestion du groupe sont présents, et que la liste des membres du groupe est vide au début. Ensuite, il ajoute un membre au groupe, vérifie qu'il a été ajouté avec succès, puis le supprime et vérifie que la liste des membres est à nouveau vide.
+#### **Linting (JavaScript)**
+- Runs ESLint to analyze backend JavaScript code.
+- Generates a lint report (`lintes_report.txt`).
 
-#### messages
+#### **Super Test**
+- Runs backend tests and documentation validation.
+- Generates a test coverage report (`testCover_report.txt`).
 
-##### Inscription, connexion et test des fonctionnalités de messages
-Ce test vérifie le processus d'inscription et de connexion d'un utilisateur, puis teste les fonctionnalités de messagerie. Après avoir visité la page, il saisit les informations d'inscription, crée un compte, se connecte avec succès, et crée un nouveau groupe avec un nom généré aléatoirement. Ensuite, il vérifie que les éléments de messagerie sont présents en cliquant sur le groupe créé et en vérifiant l'apparition du groupe dans la légende. Il saisit un message et vérifie qu'il a été posté avec succès. Ensuite, un deuxième utilisateur est créé. Le premier utilisateur se connecte et ajoute le deuxième utilisateur au groupe précédemment créé. Le deuxième utilisateur se connecte ensuite et envoie un message. Enfin, le premier utilisateur se connecte à nouveau pour lire le message du deuxième utilisateur, vérifiant que le message et le nom de l'utilisateur apparaissent correctement.
+#### **Static Security Analysis (Semgrep)**
+- Scans backend code for security vulnerabilities using Semgrep.
+- Generates a security report (`testSecurity_report.txt`).
 
-## Intégration + déploiement (/3)
+#### **CSS Linting**
+- Runs a CSS linter on `App.css`.
+- Generates a lint report (`lintcss_report.txt`).
+- The linter used is slightly outdated, leading to warnings about using IDs as selectors.
 
-#### lint-js:
-Ce job effectue le linting du code JavaScript du backend en utilisant ESLint. Il génère un rapport des erreurs de linting dans un fichier lintes_report.txt.
-#### super-test:
-Ce job teste les fonctionnalités du backend en exécutant la documentation et les tests unitaires. Il génère un rapport de couverture des tests dans un fichier testCover_report.txt.
-#### semgrep:
-Ce job effectue une analyse statique de sécurité du backend en utilisant Semgrep. Il génère un rapport des résultats de l'analyse dans un fichier testSecurity_report.txt.
-#### frontend-css:
-Ce job effectue le linting du fichier css App.css. Il génère un rapport des erreurs de linting dans un fichier lintcss_report.txt. Le linter utilisé est un peu vieux, c'est pour cela qu'il y a des erreurs de type 'Don't use ID as a selector'.
-#### frontend-cypress:
-Ce job teste les fonctionnalités du frontend en utilisant Cypress. Il nettoie la base de données, démarre le serveur backend et frontend localement, puis exécute les tests Cypress.
-#### badges:
-Ce job génère des badges à afficher dans notre projet, basés sur les résultats des jobs précédents.
-#### scalingo:
-Ce job déploie notre application sur Scalingo. Il configure l'environnement, installe les dépendances, génère la version de production du frontend, puis déploie le backend et le frontend sur Scalingo.
+#### **Frontend Testing (Cypress)**
+- Cleans the database.
+- Starts backend and frontend locally.
+- Runs Cypress tests to validate frontend functionality.
 
-## Installation
-Pour lancer le backend/frontend localement:
+#### **Badges Generation**
+- Generates status badges for test and CI/CD results to display in the project.
 
-#### Dans un terminal (1)
-cd /cheminVersDepot
+#### **Deployment (Scalingo)**
+- Configures the environment.
+- Installs dependencies.
+- Builds the frontend production version.
+- Deploys backend and frontend to Scalingo.
 
-cd backend
+---
 
-npm i
+## **Local Installation & Setup**
 
-npm run updatedb
+### **Backend Setup**
+1. Open a terminal:
+   ```sh
+   cd /path/to/repo
+   cd backend
+   npm install
+   npm run updatedb
+   npm run startdev
+   ```
 
-npm run startdev
+### **Frontend Setup**
+1. Open another terminal:
+   ```sh
+   cd /path/to/repo
+   cd frontend
+   npm install
+   npm run dev
+   ```
 
-#### Ouvrir un autre terminal (2)
-cd /cheminVersDepot
-
-cd frontend
-
-npm i
-
-npm run dev
-
-#### Dans un navigateur:
-ouvrir le lien: http://localhost:5173/
-```
+### **Accessing the Application**
+- Open your browser and navigate to:  
+  **[http://localhost:5173](http://localhost:5173)**
